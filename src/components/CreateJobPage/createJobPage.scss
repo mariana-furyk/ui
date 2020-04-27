@@ -25,20 +25,25 @@
     }
   }
   &__data {
+    height: 100%;
     flex: 1;
     padding: 28px;
+
+    .expand-icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
     .data-wrapper {
       flex: 1;
+
       &__header {
-        display: flex;
-        align-items: center;
+        padding-left: 35px;
+        padding-top: 3px;
+        margin-bottom: 40px;
+
         .header {
-          &__icon {
-            margin-right: 13px;
-            &-expanded {
-              transform: rotate(90deg);
-            }
-          }
           &__title {
             font-weight: 500;
             font-size: 20px;
@@ -48,12 +53,14 @@
           }
         }
       }
+
       &__list {
         flex: 1;
         margin-top: 16px;
         display: flex;
         flex-flow: row wrap;
       }
+
     }
   }
 }
