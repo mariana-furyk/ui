@@ -7,12 +7,12 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    max-height: 65px;
-    transition: max-height 0.3s ease-in-out;
+    height: 65px;
+    transition: height 0.3s ease-in-out;
 
     &.open {
-      max-height: 100%;
-      transition: max-height 0.3s ease-in-out;
+      height: 100%;
+      transition: height 0.3s ease-in-out;
     }
   }
 
