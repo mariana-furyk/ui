@@ -32,7 +32,10 @@ export const handleAddItem = (
         isDefault: false,
         data: {
           name: newItemObj.name,
-          path: newItemObj.path
+          path:
+            newItemObj.path.pathType +
+            newItemObj.path.project +
+            newItemObj.path.artifact
         }
       }
     ]
@@ -45,7 +48,10 @@ export const handleAddItem = (
         isDefault: false,
         data: {
           name: newItemObj.name,
-          path: newItemObj.path
+          path:
+            newItemObj.path.pathType +
+            newItemObj.path.project +
+            newItemObj.path.artifact
         }
       }
     ]
@@ -59,7 +65,10 @@ export const handleAddItem = (
   })
   setNewJobData({
     ...newJobData,
-    [newItemObj.name]: newItemObj.path
+    [newItemObj.name]:
+      newItemObj.path.pathType +
+      newItemObj.path.project +
+      newItemObj.path.artifact
   })
 }
 

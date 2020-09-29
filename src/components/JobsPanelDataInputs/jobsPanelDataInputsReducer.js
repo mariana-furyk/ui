@@ -2,7 +2,11 @@ export const initialState = {
   addNewInput: false,
   newInput: {
     name: '',
-    path: ''
+    path: {
+      pathType: '',
+      project: '',
+      artifact: ''
+    }
   },
   selectedDataInput: {}
 }
@@ -22,7 +26,11 @@ export const jobsPanelDataInputsReducer = (state, { type, payload }) => {
         ...state,
         newInput: {
           name: '',
-          path: ''
+          path: {
+            pathType: '',
+            project: '',
+            artifact: ''
+          }
         }
       }
     case inputsActions.SET_ADD_NEW_INPUT:

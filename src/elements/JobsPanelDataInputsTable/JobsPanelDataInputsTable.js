@@ -6,6 +6,7 @@ import Tooltip from '../../common/Tooltip/Tooltip'
 import TextTooltipTemplate from '../TooltipTemplate/TextTooltipTemplate'
 import JobsPanelTableAddItemRow from '../JobsPanelTableAddItemRow/JobsPanelTableAddItemRow'
 import JobsPanelTable from '../JobsPanelTable/JobsPanelTable'
+import Combobox from '../../common/Combobox/Combobox'
 
 import panelData from '../../components/JobsPanel/panelData'
 import { inputsActions } from '../../components/JobsPanelDataInputs/jobsPanelDataInputsReducer'
@@ -54,18 +55,35 @@ export const JobsPanelDataInputsTable = ({
               floatingLabel
               type="text"
             />
-            <Input
-              onChange={path =>
-                inputsDispatch({
-                  type: inputsActions.SET_NEW_INPUT_PATH,
-                  payload: path
-                })
+            <Combobox
+              comboboxClassName="input-row__item"
+              dropdown={
+                inputsState.newInput.path.pathType.length > 0
+                  ? []
+                  : [
+                      {
+                        label: 'store://',
+                        id: 'store://'
+                      },
+                      {
+                        label: 'URL',
+                        id: 's3://'
+                      }
+                    ]
               }
-              label="Input path"
-              className="input-row__item input-row__item_edit"
-              floatingLabel
-              type="text"
             />
+            {/*<Input*/}
+            {/*  onChange={path =>*/}
+            {/*    inputsDispatch({*/}
+            {/*      type: inputsActions.SET_NEW_INPUT_PATH,*/}
+            {/*      payload: path*/}
+            {/*    })*/}
+            {/*  }*/}
+            {/*  label="Input path"*/}
+            {/*  className="input-row__item input-row__item_edit"*/}
+            {/*  floatingLabel*/}
+            {/*  type="text"*/}
+            {/*/>*/}
           </div>
           <button
             className="add-input btn-add"
