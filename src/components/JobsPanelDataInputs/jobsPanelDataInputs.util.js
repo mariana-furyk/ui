@@ -147,3 +147,14 @@ export const handleDelete = (
     )
   })
 }
+
+export const comboboxSelectList = [
+  {
+    label: 'store://',
+    id: 'store://'
+  },
+  {
+    label: 'URL',
+    id: 's3://'
+  }
+]

@@ -6,7 +6,7 @@ import { ReactComponent as Arrow } from '../../images/arrow.svg'
 
 import './combobox.scss'
 
-const Combobox = ({ comboboxClassName, dropdown }) => {
+const Combobox = ({ comboboxClassName, dropdown, placeholder }) => {
   const [inputValue, setInputValue] = useState('')
   const [selectValue, setSelectValue] = useState('')
   const [dropdownStyle, setDropdownStyle] = useState({
@@ -24,23 +24,6 @@ const Combobox = ({ comboboxClassName, dropdown }) => {
     showSelectDropdown && 'combobox-icon_open',
     'combobox-icon'
   )
-
-  const inputOnChange = event => {
-    const value = event.target.value
-    const div = document.createElement('div')
-    div.innerHTML = value
-    comboboxRef.current.appendChild(div)
-
-    const rect = div.getBoundingClientRect()
-
-    div.remove()
-
-    setDropdownStyle(state => ({
-      ...state,
-      left: `${rect.width - 10}px`
-    }))
-    setInputValue(value)
-  }
 
   const handleDropdownOptionClick = option => {
     if (selectValue.length === 0) {
@@ -61,6 +44,32 @@ const Combobox = ({ comboboxClassName, dropdown }) => {
     }
   }
 
+  const inputOnClick = event => {
+    if (selectValue.length > 0) {
+      inputOnChange(event)
+      setShowMatchesDropdown(true)
+    }
+  }
+
+  const inputOnChange = event => {
+    const value = event.target.value
+    const div = document.createElement('div')
+    div.innerHTML = value
+    comboboxRef.current.appendChild(div)
+
+    const rect = div.getBoundingClientRect()
+
+    div.remove()
+
+    setDropdownStyle(state => ({
+      ...state,
+      left: `${rect.width - 10}px`
+    }))
+    setInputValue(value)
+  }
+
+  console.log(dropdown)
+
   return (
     <div className={comboboxClassNames} ref={comboboxRef}>
       <Arrow
@@ -75,6 +84,8 @@ const Combobox = ({ comboboxClassName, dropdown }) => {
       <input
         className="combobox-input"
         onChange={inputOnChange}
+        onClick={inputOnClick}
+        placeholder={placeholder}
         type="text"
         value={inputValue}
       />
@@ -96,11 +107,13 @@ const Combobox = ({ comboboxClassName, dropdown }) => {
 }
 
 Combobox.defaultProps = {
-  comboboxClassName: ''
+  comboboxClassName: '',
+  placeholder: ''
 }
 
 Combobox.propTypes = {
-  comboboxClassName: PropTypes.string
+  comboboxClassName: PropTypes.string,
+  placeholder: PropTypes.string
 }
 
 export default Combobox

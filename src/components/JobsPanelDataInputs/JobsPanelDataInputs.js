@@ -1,5 +1,6 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import JobsPanelDataInputsView from './JobsPanelDataInputsView'
 
@@ -14,18 +15,52 @@ import {
   handleDelete,
   handleEdit
 } from './jobsPanelDataInputs.util'
+import { chain } from 'lodash'
 
 const JobsPanelDataInputs = ({
   inputs,
   match,
   panelDispatch,
   panelState,
+  projectStore,
   setNewJobInputs
 }) => {
   const [inputsState, inputsDispatch] = useReducer(
     jobsPanelDataInputsReducer,
     initialState
   )
+  const [comboboxMatchesList, setComboboxMatchesList] = useState(
+    projectStore.projects.map(project => project.name)
+  )
+
+  console.log(comboboxMatchesList, 'matches')
+
+  useEffect(() => {
+    const projects = projectStore.projects.map(project => project.name)
+
+    if (
+      inputsState.newInput.path.artifact.length !== 0 &&
+      inputsState.newInput.path.project.length > 0
+    ) {
+      const artifacts = chain(projectStore.projects)
+        .map(project => project?.artifacts?.map(artifact => artifact.db_key))
+        .flatten()
+        .value()
+
+      console.log(artifacts)
+      setComboboxMatchesList(artifacts)
+    } else if (
+      inputsState.newInput.path.artifact.length === 0 &&
+      JSON.stringify(comboboxMatchesList) !== JSON.stringify(projects)
+    ) {
+      setComboboxMatchesList(projects)
+    }
+  }, [
+    comboboxMatchesList,
+    inputsState.newInput.path.artifact.length,
+    inputsState.newInput.path.project.length,
+    projectStore.projects
+  ])
 
   const handleAddNewItem = () => {
     handleAddItem(
@@ -73,6 +108,7 @@ const JobsPanelDataInputs = ({
 
   return (
     <JobsPanelDataInputsView
+      comboboxMatchesList={comboboxMatchesList}
       handleAddNewItem={handleAddNewItem}
       handleDeleteItems={handleDeleteItems}
       handleEditItems={handleEditItems}
@@ -93,4 +129,4 @@ JobsPanelDataInputs.propTypes = {
   setNewJobInputs: PropTypes.func.isRequired
 }
 
-export default JobsPanelDataInputs
+export default connect(projectStore => projectStore)(JobsPanelDataInputs)

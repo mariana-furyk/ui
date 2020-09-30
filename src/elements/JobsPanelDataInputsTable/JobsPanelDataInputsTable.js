@@ -14,6 +14,8 @@ import { inputsActions } from '../../components/JobsPanelDataInputs/jobsPanelDat
 import { ReactComponent as Plus } from '../../images/plus.svg'
 
 export const JobsPanelDataInputsTable = ({
+  comboboxMatchesList,
+  comboboxSelectList,
   handleAddNewItem,
   handleEditItems,
   handleDeleteItems,
@@ -22,6 +24,7 @@ export const JobsPanelDataInputsTable = ({
   match,
   panelState
 }) => {
+  console.log(inputsState.newInput.path.pathType.length > 0)
   return (
     <JobsPanelTable
       addNewItem={inputsState.addNewInput}
@@ -59,31 +62,17 @@ export const JobsPanelDataInputsTable = ({
               comboboxClassName="input-row__item"
               dropdown={
                 inputsState.newInput.path.pathType.length > 0
-                  ? []
-                  : [
-                      {
-                        label: 'store://',
-                        id: 'store://'
-                      },
-                      {
-                        label: 'URL',
-                        id: 's3://'
-                      }
-                    ]
+                  ? comboboxMatchesList
+                  : comboboxSelectList
               }
+              // onChange={path =>
+              //   inputsDispatch({
+              //     type: inputsActions.SET_NEW_INPUT_PATH,
+              //     payload: {path}
+              //   })
+              // }
+              placeholder="Path Type"
             />
-            {/*<Input*/}
-            {/*  onChange={path =>*/}
-            {/*    inputsDispatch({*/}
-            {/*      type: inputsActions.SET_NEW_INPUT_PATH,*/}
-            {/*      payload: path*/}
-            {/*    })*/}
-            {/*  }*/}
-            {/*  label="Input path"*/}
-            {/*  className="input-row__item input-row__item_edit"*/}
-            {/*  floatingLabel*/}
-            {/*  type="text"*/}
-            {/*/>*/}
           </div>
           <button
             className="add-input btn-add"

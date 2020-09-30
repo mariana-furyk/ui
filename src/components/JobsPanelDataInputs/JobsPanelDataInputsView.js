@@ -6,8 +6,10 @@ import Input from '../../common/Input/Input'
 import { JobsPanelDataInputsTable } from '../../elements/JobsPanelDataInputsTable/JobsPanelDataInputsTable'
 
 import { panelActions } from '../JobsPanel/panelReducer'
+import { comboboxSelectList } from './jobsPanelDataInputs.util'
 
 const JobsPanelDataInputsView = ({
+  comboboxMatchesList,
   handleAddNewItem,
   handleDeleteItems,
   handleEditItems,
@@ -21,6 +23,8 @@ const JobsPanelDataInputsView = ({
     <div className="job-panel__item">
       <JobsPanelSection title="Data inputs">
         <JobsPanelDataInputsTable
+          comboboxMatchesList={comboboxMatchesList}
+          comboboxSelectList={comboboxSelectList}
           handleAddNewItem={handleAddNewItem}
           handleEditItems={handleEditItems}
           handleDeleteItems={handleDeleteItems}
