@@ -19,12 +19,13 @@ export const JobsPanelDataInputsTable = ({
   handleAddNewItem,
   handleEditItems,
   handleDeleteItems,
+  handlePathChange,
+  handlePathTypeChange,
   inputsDispatch,
   inputsState,
   match,
   panelState
 }) => {
-  console.log(inputsState.newInput.path.pathType.length > 0)
   return (
     <JobsPanelTable
       addNewItem={inputsState.addNewInput}
@@ -60,18 +61,16 @@ export const JobsPanelDataInputsTable = ({
             />
             <Combobox
               comboboxClassName="input-row__item"
-              dropdown={
-                inputsState.newInput.path.pathType.length > 0
-                  ? comboboxMatchesList
-                  : comboboxSelectList
-              }
-              // onChange={path =>
-              //   inputsDispatch({
-              //     type: inputsActions.SET_NEW_INPUT_PATH,
-              //     payload: {path}
-              //   })
-              // }
-              placeholder="Path Type"
+              inputPlaceholder={inputsState.pathPlaceholder}
+              matches={comboboxMatchesList}
+              selectDropdownList={comboboxSelectList}
+              selectOnChange={path => {
+                handlePathTypeChange(path)
+              }}
+              inputOnChange={path => {
+                handlePathChange(path)
+              }}
+              selectPlaceholder="Path Type"
             />
           </div>
           <button
@@ -99,9 +98,13 @@ export const JobsPanelDataInputsTable = ({
 }
 
 JobsPanelDataInputsTable.propTypes = {
+  comboboxMatchesList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  comboboxSelectList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   handleAddNewItem: PropTypes.func.isRequired,
   handleEditItems: PropTypes.func.isRequired,
   handleDeleteItems: PropTypes.func.isRequired,
+  handlePathChange: PropTypes.func.isRequired,
+  handlePathTypeChange: PropTypes.func.isRequired,
   inputsDispatch: PropTypes.func.isRequired,
   inputsState: PropTypes.shape({}).isRequired,
   match: PropTypes.shape({}).isRequired,

@@ -1,4 +1,5 @@
 import { isEveryObjectValueEmpty } from '../../utils/isEveryObjectValueEmpty'
+import { inputsActions } from './jobsPanelDataInputsReducer'
 
 export const handleAddItem = (
   currentTableData,
@@ -35,6 +36,7 @@ export const handleAddItem = (
           path:
             newItemObj.path.pathType +
             newItemObj.path.project +
+            '/' +
             newItemObj.path.artifact
         }
       }
@@ -51,6 +53,7 @@ export const handleAddItem = (
           path:
             newItemObj.path.pathType +
             newItemObj.path.project +
+            '/' +
             newItemObj.path.artifact
         }
       }
@@ -68,6 +71,7 @@ export const handleAddItem = (
     [newItemObj.name]:
       newItemObj.path.pathType +
       newItemObj.path.project +
+      '/' +
       newItemObj.path.artifact
   })
 }
@@ -150,7 +154,7 @@ export const handleDelete = (
 
 export const comboboxSelectList = [
   {
-    label: 'store://',
+    label: 'store',
     id: 'store://'
   },
   {
@@ -158,3 +162,57 @@ export const comboboxSelectList = [
     id: 's3://'
   }
 ]
+
+export const S3_INPUT_PATH_TYPE = 's3://'
+
+export const handleInputPathTypeChange = (
+  inputsDispatch,
+  newInput,
+  pathType,
+  pathPlaceholder
+) => {
+  if (pathType === S3_INPUT_PATH_TYPE && pathPlaceholder.length === 0) {
+    inputsDispatch({
+      type: inputsActions.SET_PATH_PLACEHOLDER,
+      payload: 'bucket/path'
+    })
+  } else if (pathType !== S3_INPUT_PATH_TYPE && pathPlaceholder.length > 0) {
+    inputsDispatch({
+      type: inputsActions.SET_PATH_PLACEHOLDER,
+      payload: ''
+    })
+  }
+
+  inputsDispatch({
+    type: inputsActions.SET_NEW_INPUT_PATH,
+    payload: {
+      ...newInput.path,
+      pathType: pathType
+    }
+  })
+}
+
+export const handleInputPathChange = (inputsDispatch, inputsState, path) => {
+  const pathItems = path.split('/')
+
+  if (pathItems[1] === '' || pathItems[1]?.length > 0) {
+    inputsDispatch({
+      type: inputsActions.SET_NEW_INPUT_PROJECT_PATH_ENTERED,
+      payload: true
+    })
+  } else if (inputsState.newInputProjectPathEntered) {
+    inputsDispatch({
+      type: inputsActions.SET_NEW_INPUT_PROJECT_PATH_ENTERED,
+      payload: false
+    })
+  }
+
+  inputsDispatch({
+    type: inputsActions.SET_NEW_INPUT_PATH,
+    payload: {
+      ...inputsState.newInput.path,
+      project: pathItems[0],
+      artifact: pathItems[1] ? pathItems[1] : inputsState.newInput.path.artifact
+    }
+  })
+}

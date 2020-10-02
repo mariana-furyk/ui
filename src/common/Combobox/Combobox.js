@@ -1,57 +1,118 @@
-import React, { useState } from 'react'
-import classnames from 'classnames'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
-import { ReactComponent as Arrow } from '../../images/arrow.svg'
+import ComboboxView from './ComboboxView'
 
 import './combobox.scss'
 
-const Combobox = ({ comboboxClassName, dropdown, placeholder }) => {
+const Combobox = ({
+  comboboxClassName,
+  selectDropdownList,
+  inputPlaceholder,
+  matches,
+  inputOnChange,
+  selectOnChange,
+  selectPlaceholder
+}) => {
   const [inputValue, setInputValue] = useState('')
   const [selectValue, setSelectValue] = useState('')
   const [dropdownStyle, setDropdownStyle] = useState({
     position: 'absolute',
     top: '40px',
-    left: 0
+    left: 0,
+    paddingTop: '10px'
   })
   const [showSelectDropdown, setShowSelectDropdown] = useState(false)
   const [showMatchesDropdown, setShowMatchesDropdown] = useState(false)
+  const [dropdownList, setDropdownList] = useState(matches)
+  const [searchIsFocused, setSearchIsFocused] = useState(false)
 
   const comboboxRef = React.createRef()
 
-  const comboboxClassNames = classnames(comboboxClassName, 'combobox')
-  const iconClassNames = classnames(
-    showSelectDropdown && 'combobox-icon_open',
-    'combobox-icon'
+  useEffect(() => {
+    if (!searchIsFocused) {
+      if (JSON.stringify(dropdownList) !== JSON.stringify(matches)) {
+        setDropdownList(matches)
+      }
+    }
+  }, [dropdownList, matches, searchIsFocused])
+
+  const handleOnBlur = useCallback(
+    event => {
+      if (comboboxRef.current && !comboboxRef.current.contains(event.target)) {
+        if (showSelectDropdown) {
+          setShowSelectDropdown(false)
+        }
+
+        if (showMatchesDropdown) {
+          setShowMatchesDropdown(false)
+        }
+
+        if (searchIsFocused) {
+          setSearchIsFocused(false)
+        }
+      }
+    },
+    [comboboxRef, searchIsFocused, showMatchesDropdown, showSelectDropdown]
   )
 
-  const handleDropdownOptionClick = option => {
-    if (selectValue.length === 0) {
-      setSelectValue(option)
-      setInputValue(option)
-    } else {
-      const inputValueItems = inputValue.slice(selectValue.length).split('/')
-      inputValueItems[inputValueItems.length - 1] = option
-      setInputValue(selectValue + inputValueItems.join('/'))
+  useEffect(() => {
+    window.addEventListener('click', handleOnBlur)
+
+    return () => {
+      window.removeEventListener('click', handleOnBlur)
+    }
+  }, [handleOnBlur])
+
+  const handleMatchesOptionClick = option => {
+    const inputValueItems = inputValue.split('/')
+    inputValueItems[inputValueItems.length - 1] = option
+
+    if (searchIsFocused) {
+      setSearchIsFocused(false)
     }
 
-    if (showSelectDropdown) {
-      setShowSelectDropdown(false)
+    setInputValue(inputValueItems.join('/'))
+    setShowMatchesDropdown(false)
+    inputOnChange(inputValueItems.join('/'))
+  }
+
+  const handleSelectOptionOnClick = option => {
+    if (selectValue.length > 0) {
+      setInputValue('')
     }
 
+    setSelectValue(option)
+    selectOnChange(option)
+    setShowSelectDropdown(false)
+  }
+
+  const handleIconClick = () => {
     if (showMatchesDropdown) {
       setShowMatchesDropdown(false)
     }
+
+    setDropdownStyle(state => ({
+      ...state,
+      left: 0,
+      paddingTop: '10px'
+    }))
+    setShowSelectDropdown(state => !state)
   }
 
   const inputOnClick = event => {
     if (selectValue.length > 0) {
-      inputOnChange(event)
+      handleInputOnChange(event)
+
+      if (showSelectDropdown) {
+        setShowSelectDropdown(false)
+      }
+
       setShowMatchesDropdown(true)
     }
   }
 
-  const inputOnChange = event => {
+  const handleInputOnChange = event => {
     const value = event.target.value
     const div = document.createElement('div')
     div.innerHTML = value
@@ -63,57 +124,66 @@ const Combobox = ({ comboboxClassName, dropdown, placeholder }) => {
 
     setDropdownStyle(state => ({
       ...state,
-      left: `${rect.width - 10}px`
+      left: `${rect.width - 10}px`,
+      paddingTop: '0'
     }))
+
+    if (searchIsFocused) {
+      setSearchIsFocused(false)
+    }
+
+    inputOnChange(value)
     setInputValue(value)
   }
 
-  console.log(dropdown)
+  const matchesSearchOnChange = event => {
+    event.persist()
+    setDropdownList(() =>
+      matches.filter(option => {
+        return option.id.startsWith(event.target.value)
+      })
+    )
+  }
 
   return (
-    <div className={comboboxClassNames} ref={comboboxRef}>
-      <Arrow
-        className={iconClassNames}
-        onClick={() => {
-          if (showMatchesDropdown) {
-            setShowMatchesDropdown(false)
-          }
-          setShowSelectDropdown(state => !state)
-        }}
-      />
-      <input
-        className="combobox-input"
-        onChange={inputOnChange}
-        onClick={inputOnClick}
-        placeholder={placeholder}
-        type="text"
-        value={inputValue}
-      />
-      {(showSelectDropdown || showMatchesDropdown) && dropdown.length > 0 && (
-        <ul style={dropdownStyle} className="combobox-dropdown">
-          {dropdown.map(value => (
-            <li
-              className="combobox-dropdown__option"
-              key={value.id}
-              onClick={() => handleDropdownOptionClick(value.id)}
-            >
-              {value.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <ComboboxView
+      comboboxClassName={comboboxClassName}
+      dropdownList={dropdownList}
+      dropdownStyle={dropdownStyle}
+      handleIconClick={handleIconClick}
+      handleInputOnChange={handleInputOnChange}
+      handleMatchesOptionClick={handleMatchesOptionClick}
+      handleSelectOptionOnClick={handleSelectOptionOnClick}
+      inputOnClick={inputOnClick}
+      inputPlaceholder={inputPlaceholder}
+      inputValue={inputValue}
+      matchesSearchOnChange={matchesSearchOnChange}
+      ref={comboboxRef}
+      searchIsFocused={searchIsFocused}
+      selectDropdownList={selectDropdownList}
+      selectPlaceholder={selectPlaceholder}
+      selectValue={selectValue}
+      setSearchIsFocused={setSearchIsFocused}
+      showMatchesDropdown={showMatchesDropdown}
+      showSelectDropdown={showSelectDropdown}
+    />
   )
 }
 
 Combobox.defaultProps = {
   comboboxClassName: '',
-  placeholder: ''
+  inputPlaceholder: '',
+  selectPlaceholder: ''
 }
 
 Combobox.propTypes = {
   comboboxClassName: PropTypes.string,
-  placeholder: PropTypes.string
+  inputOnChange: PropTypes.func.isRequired,
+  inputPlaceholder: PropTypes.string,
+  matches: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  selectDropdownList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  selectOnChange: PropTypes.func.isRequired,
+  selectPlaceholder: PropTypes.string
 }
 
 export default Combobox
