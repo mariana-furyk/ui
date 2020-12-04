@@ -46,7 +46,7 @@ const Projects = ({
   const pageData = useMemo(
     () => ({
       ...projectsPageData,
-      pageActionsMenu: generatePageActionsMenu(() => handleNewProjectClick())
+      pageActionsMenu: generatePageActionsMenu(handleNewProjectClick)
     }),
     []
   )

@@ -3,11 +3,11 @@ import React from 'react'
 import { ReactComponent as Yaml } from '../../images/yaml.svg'
 import { ReactComponent as Delete } from '../../images/delete.svg'
 
-export const generatePageActionsMenu = createProject => [
+export const generatePageActionsMenu = handleNewProjectClick => [
   {
     type: 'button',
     buttonTitle: 'New Project',
-    onClick: createProject
+    onClick: handleNewProjectClick
   }
 ]
 
