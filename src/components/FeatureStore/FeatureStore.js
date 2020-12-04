@@ -10,16 +10,12 @@ import artifactsAction from '../../actions/artifacts'
 import { generateArtifacts } from '../../utils/generateArtifacts'
 import {
   detailsMenu,
-  filters,
-  infoHeaders,
-  page,
-  pageKind,
   registerArtifactDialogTitle,
-  tableHeaders,
-  tabs
+  generatePageData
 } from './feaureStore.util'
 import { handleArtifactTreeFilterChange } from '../../utils/handleArtifactTreeFilterChange'
 import { DETAILS_ANALYSIS_TAB, DETAILS_METADATA_TAB } from '../../constants'
+import { isEveryObjectValueEmpty } from '../../utils/isEveryObjectValueEmpty'
 
 const FeatureStore = ({
   artifactsStore,
@@ -33,14 +29,14 @@ const FeatureStore = ({
   const [selectedDataSet, setSelectedDataSet] = useState({})
   const [isPopupDialogOpen, setIsPopupDialogOpen] = useState(false)
   const [pageData, setPageData] = useState({
-    detailsMenu,
-    filters,
-    infoHeaders,
-    page,
-    pageKind,
-    registerArtifactDialogTitle,
-    tableHeaders,
-    tabs
+    detailsMenu: [],
+    filters: [],
+    infoHeaders: [],
+    page: '',
+    pageActionsMenu: [],
+    pageKind: '',
+    tableHeaders: [],
+    tabs: []
   })
 
   const fetchData = useCallback(
@@ -59,6 +55,14 @@ const FeatureStore = ({
     },
     [fetchDataSets]
   )
+
+  const openPopupDialog = () => setIsPopupDialogOpen(true)
+
+  useEffect(() => {
+    if (isEveryObjectValueEmpty(pageData)) {
+      setPageData(generatePageData(openPopupDialog))
+    }
+  }, [pageData])
 
   useEffect(() => {
     fetchData({ project: match.params.projectName })
@@ -178,7 +182,7 @@ const FeatureStore = ({
           pageData={pageData}
           refresh={fetchData}
           setIsPopupDialogOpen={setIsPopupDialogOpen}
-          title={pageData.registerArtifactDialogTitle}
+          title={registerArtifactDialogTitle}
         />
       )}
     </>

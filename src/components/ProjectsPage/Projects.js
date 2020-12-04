@@ -27,6 +27,7 @@ const Projects = ({
   fetchProjectRunningJobs,
   fetchProjects,
   match,
+  nuclioStore,
   projectStore,
   removeNewProject,
   removeNewProjectError,
@@ -139,6 +140,7 @@ const Projects = ({
       isEmptyValue={isEmptyValue}
       match={match}
       pageData={pageData}
+      nuclioStore={nuclioStore}
       projectStore={projectStore}
       removeNewProjectError={removeNewProjectError}
       setNewProjectDescription={setNewProjectDescription}
@@ -152,8 +154,9 @@ Projects.propTypes = {
 }
 
 export default connect(
-  projectStore => ({
-    ...projectStore
+  (projectStore, nuclioStore) => ({
+    ...projectStore,
+    ...nuclioStore
   }),
   {
     ...projectsAction,
