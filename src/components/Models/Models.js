@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -8,15 +8,7 @@ import RegisterArtifactPopup from '../RegisterArtifactPopup/RegisterArtifactPopu
 
 import artifactsAction from '../../actions/artifacts'
 import { generateArtifacts } from '../../utils/generateArtifacts'
-import {
-  detailsMenu,
-  filters,
-  page,
-  pageKind,
-  registerArtifactDialogTitle,
-  tableHeaders,
-  infoHeaders
-} from './models.util'
+import { generatePageData, registerArtifactDialogTitle } from './models.util'
 import { handleArtifactTreeFilterChange } from '../../utils/handleArtifactTreeFilterChange'
 
 const Models = ({
@@ -30,15 +22,10 @@ const Models = ({
   const [models, setModels] = useState([])
   const [selectedModel, setSelectedModel] = useState({})
   const [isPopupDialogOpen, setIsPopupDialogOpen] = useState(false)
-  const [pageData] = useState({
-    detailsMenu,
-    filters,
-    page,
-    pageKind,
-    registerArtifactDialogTitle,
-    tableHeaders,
-    infoHeaders
-  })
+
+  const openPopupDialog = () => setIsPopupDialogOpen(true)
+
+  const pageData = useMemo(() => generatePageData(openPopupDialog), [])
 
   const fetchData = useCallback(
     item => {
@@ -136,7 +123,7 @@ const Models = ({
           pageData={pageData}
           refresh={fetchData}
           setIsPopupDialogOpen={setIsPopupDialogOpen}
-          title={pageData.registerArtifactDialogTitle}
+          title={registerArtifactDialogTitle}
         />
       )}
     </>

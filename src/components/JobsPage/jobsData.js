@@ -2,6 +2,7 @@ import React from 'react'
 
 import { ReactComponent as Delete } from '../../images/delete.svg'
 import { ReactComponent as Dropdown } from '../../images/dropdown.svg'
+import { SCHEDULE_TAB } from '../../constants'
 
 export const page = 'JOBS'
 export const infoHeaders = [
@@ -96,29 +97,31 @@ export const initialStateFilter = 'all'
 export const initialGroupFilter = 'name'
 export const tabs = ['monitor', 'schedule']
 export const generatePageData = (
-  scheduled,
+  match,
   removeScheduledJob,
   handleSubmitJob
 ) => {
   let jobFilters = []
 
-  if (scheduled) {
+  if (match.params.pageTab === SCHEDULE_TAB) {
     jobFilters = ['name', 'labels']
   } else {
     jobFilters = [...filters]
   }
   return {
     actionsMenu:
-      scheduled && generateActionsMenu(removeScheduledJob, handleSubmitJob),
+      match.params.pageTab === SCHEDULE_TAB &&
+      generateRowActionsMenu(removeScheduledJob, handleSubmitJob),
     detailsMenu,
     filters: jobFilters,
     page,
-    tableHeaders: generateTableHeaders(scheduled),
+    pageActionsMenu: generatePageActionsMenu(match),
+    tableHeaders: generateTableHeaders(match.params.pageTab === SCHEDULE_TAB),
     tabs,
     infoHeaders
   }
 }
-export const generateActionsMenu = (removeScheduledJob, handleSubmitJob) => [
+export const generateRowActionsMenu = (removeScheduledJob, handleSubmitJob) => [
   {
     label: 'Remove',
     icon: <Delete />,
@@ -128,5 +131,13 @@ export const generateActionsMenu = (removeScheduledJob, handleSubmitJob) => [
     label: 'Run now',
     icon: <Dropdown className="action_cell__run-icon" />,
     onClick: job => handleSubmitJob(job)
+  }
+]
+
+export const generatePageActionsMenu = match => [
+  {
+    type: 'link',
+    link: `/projects/${match.params.projectName}/jobs/${match.params.pageTab}/create-new-job`,
+    linkTitle: 'New Job'
   }
 ]

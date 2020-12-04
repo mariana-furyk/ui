@@ -3,7 +3,15 @@ import React from 'react'
 import { ReactComponent as Yaml } from '../../images/yaml.svg'
 import { ReactComponent as Delete } from '../../images/delete.svg'
 
-export const pageData = {
+export const generatePageActionsMenu = createProject => [
+  {
+    type: 'button',
+    buttonTitle: 'New Project',
+    onClick: createProject
+  }
+]
+
+export const projectsPageData = {
   page: 'PROJECTS'
 }
 export const generateProjectActionsMenu = (

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -8,15 +8,7 @@ import RegisterArtifactPopup from '../RegisterArtifactPopup/RegisterArtifactPopu
 
 import artifactsAction from '../../actions/artifacts'
 import { generateArtifacts } from '../../utils/generateArtifacts'
-import {
-  detailsMenu,
-  filters,
-  page,
-  pageKind,
-  registerArtifactDialogTitle,
-  tableHeaders,
-  infoHeaders
-} from './files.util'
+import { registerArtifactDialogTitle, generatePageData } from './files.util'
 import { handleArtifactTreeFilterChange } from '../../utils/handleArtifactTreeFilterChange'
 
 const Files = ({
@@ -30,15 +22,10 @@ const Files = ({
   const [files, setFiles] = useState([])
   const [selectedFile, setSelectedFile] = useState({})
   const [isPopupDialogOpen, setIsPopupDialogOpen] = useState(false)
-  const [pageData] = useState({
-    detailsMenu,
-    filters,
-    page,
-    pageKind,
-    registerArtifactDialogTitle,
-    tableHeaders,
-    infoHeaders
-  })
+
+  const openPopupDialog = () => setIsPopupDialogOpen(true)
+
+  const pageData = useMemo(() => generatePageData(openPopupDialog), [])
 
   const fetchData = useCallback(
     item => {
@@ -123,7 +110,6 @@ const Files = ({
         handleSelectItem={item => setSelectedFile({ item })}
         loading={artifactsStore.loading}
         match={match}
-        openPopupDialog={() => setIsPopupDialogOpen(true)}
         pageData={pageData}
         refresh={fetchData}
         selectedItem={selectedFile.item}
@@ -136,7 +122,7 @@ const Files = ({
           pageData={pageData}
           refresh={fetchData}
           setIsPopupDialogOpen={setIsPopupDialogOpen}
-          title={pageData.registerArtifactDialogTitle}
+          title={registerArtifactDialogTitle}
         />
       )}
     </>

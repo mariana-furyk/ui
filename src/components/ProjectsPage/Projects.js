@@ -8,7 +8,9 @@ import ProjectsView from './ProjectsView'
 import {
   generateProjectActionsMenu,
   successProjectDeletingMessage,
-  failedProjectDeletingMessage
+  failedProjectDeletingMessage,
+  projectsPageData,
+  generatePageActionsMenu
 } from './projectsData'
 import nuclioActions from '../../actions/nuclio'
 import notificationActions from '../../actions/notification'
@@ -35,6 +37,18 @@ const Projects = ({
   const [convertedYaml, setConvertedYaml] = useState('')
   const [createProject, setCreateProject] = useState(false)
   const [isEmptyValue, setIsEmptyValue] = useState(false)
+
+  const handleNewProjectClick = () => {
+    setCreateProject(true)
+  }
+
+  const pageData = useMemo(
+    () => ({
+      ...projectsPageData,
+      pageActionsMenu: generatePageActionsMenu(() => handleNewProjectClick())
+    }),
+    []
+  )
 
   const handleDeleteProject = useCallback(
     project => {
@@ -124,9 +138,9 @@ const Projects = ({
       handleCreateProject={handleCreateProject}
       isEmptyValue={isEmptyValue}
       match={match}
+      pageData={pageData}
       projectStore={projectStore}
       removeNewProjectError={removeNewProjectError}
-      setCreateProject={setCreateProject}
       setNewProjectDescription={setNewProjectDescription}
       setNewProjectName={setNewProjectName}
     />
