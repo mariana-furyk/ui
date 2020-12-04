@@ -13,8 +13,6 @@ import NoData from '../../common/NoData/NoData'
 import YamlModal from '../../common/YamlModal/YamlModal'
 import Notification from '../../common/Notification/Notification'
 
-import { pageData } from './projectsData'
-
 import './projects.scss'
 
 const ProjectsView = ({
@@ -32,10 +30,10 @@ const ProjectsView = ({
   handleCreateProject,
   isEmptyValue,
   match,
+  pageData,
   nuclioStore,
   projectStore,
   removeNewProjectError,
-  setCreateProject,
   setNewProjectDescription,
   setNewProjectName
 }) => {
@@ -99,11 +97,7 @@ const ProjectsView = ({
       )}
       <div className="projects__header">
         <Breadcrumbs match={match} />
-        <PageActionsMenu
-          match={match}
-          onClick={() => setCreateProject(true)}
-          pageData={pageData}
-        />
+        <PageActionsMenu actionsMenu={pageData.pageActionsMenu} />
       </div>
       <div className="projects__wrapper">
         {projectStore.projects.length !== 0 || !projectStore.error ? (
@@ -152,10 +146,10 @@ ProjectsView.propTypes = {
   handleCreateProject: PropTypes.func.isRequired,
   isEmptyValue: PropTypes.bool.isRequired,
   match: PropTypes.shape({}).isRequired,
+  pageData: PropTypes.shape({}).isRequired,
   nuclioStore: PropTypes.shape({}).isRequired,
   projectStore: PropTypes.shape({}).isRequired,
   removeNewProjectError: PropTypes.func.isRequired,
-  setCreateProject: PropTypes.func.isRequired,
   setNewProjectDescription: PropTypes.func.isRequired,
   setNewProjectName: PropTypes.func.isRequired
 }

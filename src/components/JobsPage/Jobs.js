@@ -65,11 +65,7 @@ const Jobs = ({
   }
 
   const pageData = useCallback(
-    generatePageData(
-      match.params.pageTab === SCHEDULE_TAB,
-      handleRemoveScheduledJob,
-      handleRunJob
-    ),
+    generatePageData(match, handleRemoveScheduledJob, handleRunJob),
     [match.params.pageTab]
   )
 

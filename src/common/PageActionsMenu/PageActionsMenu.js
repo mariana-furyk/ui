@@ -2,46 +2,43 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { JOBS_PAGE, PROJECTS_PAGE, ARTIFACTS_PAGE } from '../../constants.js'
-
-const PageActionsMenu = ({ match, onClick, pageData }) => {
-  return (
-    <>
-      {pageData.page === JOBS_PAGE && (
-        <div data-testid="actions-link" className="page-actions-container">
-          <Link
-            className="btn_secondary btn_small"
-            to={`/projects/${match.params.projectName}/jobs/${match.params.pageTab}/create-new-job`}
+const PageActionsMenu = ({ actionsMenu }) => {
+  return actionsMenu
+    ? actionsMenu.map((actionMenuItem, index) =>
+        actionMenuItem.type === 'link' ? (
+          <div
+            data-testid="actions-link"
+            className="page-actions-container"
+            key={Date.now() + index}
           >
-            New Job
-          </Link>
-        </div>
-      )}
-      {(pageData.page === PROJECTS_PAGE ||
-        pageData.page === ARTIFACTS_PAGE) && (
-        <div data-testid="actions-button" className="page-actions-container">
-          <button
-            className="btn_secondary btn_small btn_register"
-            onClick={onClick}
+            <Link className="btn_secondary btn_small" to={actionMenuItem.link}>
+              {actionMenuItem.linkTitle}
+            </Link>
+          </div>
+        ) : (
+          <div
+            data-testid="actions-button"
+            className="page-actions-container"
+            key={Date.now() + index}
           >
-            {pageData.page === PROJECTS_PAGE
-              ? 'New Project'
-              : pageData.registerArtifactDialogTitle}
-          </button>
-        </div>
-      )}
-    </>
-  )
+            <button
+              className="btn_secondary btn_small btn_register"
+              onClick={actionMenuItem.onClick}
+            >
+              {actionMenuItem.buttonTitle}
+            </button>
+          </div>
+        )
+      )
+    : null
 }
 
 PageActionsMenu.defaultProps = {
-  onClick: null
+  actionsMenu: []
 }
 
 PageActionsMenu.propTypes = {
-  match: PropTypes.shape({}).isRequired,
-  onClick: PropTypes.func,
-  pageData: PropTypes.shape({}).isRequired
+  actionsMenu: PropTypes.arrayOf(PropTypes.shape({}))
 }
 
 export default PageActionsMenu

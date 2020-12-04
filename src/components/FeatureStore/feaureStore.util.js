@@ -55,3 +55,20 @@ export const tableHeaders = [
   }
 ]
 export const tabs = ['datasets']
+
+export const generatePageData = openPopupDialog => ({
+  detailsMenu,
+  filters,
+  infoHeaders,
+  page,
+  pageActionsMenu: [
+    {
+      type: 'button',
+      buttonTitle: registerArtifactDialogTitle,
+      onClick: openPopupDialog
+    }
+  ],
+  pageKind,
+  tableHeaders,
+  tabs
+})

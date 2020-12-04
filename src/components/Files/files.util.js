@@ -58,3 +58,19 @@ export const tableHeaders = [
     class: 'action_cell'
   }
 ]
+
+export const generatePageData = openPopupDialog => ({
+  detailsMenu,
+  filters,
+  page,
+  pageActionsMenu: [
+    {
+      type: 'button',
+      buttonTitle: registerArtifactDialogTitle,
+      onClick: openPopupDialog
+    }
+  ],
+  pageKind,
+  tableHeaders,
+  infoHeaders
+})
