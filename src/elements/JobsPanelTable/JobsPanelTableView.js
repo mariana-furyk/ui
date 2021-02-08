@@ -19,7 +19,10 @@ const JobsPanelTableView = ({
   match,
   section,
   selectedItem,
-  setSelectedItem
+  setSelectedItem,
+  sectionDispatch,
+  sectionState,
+  comboboxMatchesList
 }) => {
   return (
     <div
@@ -49,6 +52,9 @@ const JobsPanelTableView = ({
               key={index}
               selectedDataInput={selectedItem}
               setSelectedDataInput={setSelectedItem}
+              inputsDispatch={sectionDispatch}
+              inputsState={sectionState}
+              comboboxMatchesList={comboboxMatchesList}
             />
           ) : section.includes('advanced') ? (
             <EditableAdvancedRow

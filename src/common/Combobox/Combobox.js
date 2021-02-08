@@ -11,6 +11,7 @@ const Combobox = ({
   inputDefaultValue,
   inputOnChange,
   matches,
+  selectDefaultValue,
   selectDropdownList,
   selectOnChange,
   selectPlaceholder
@@ -49,6 +50,15 @@ const Combobox = ({
   ])
 
   useEffect(() => {
+    if (
+      selectDefaultValue?.label.length > 0 &&
+      selectValue.label.length === 0
+    ) {
+      setSelectValue(selectDefaultValue)
+    }
+  }, [selectDefaultValue, selectValue.label.length])
+
+  useEffect(() => {
     if (!searchIsFocused) {
       if (JSON.stringify(dropdownList) !== JSON.stringify(matches)) {
         setDropdownList(matches)
@@ -59,6 +69,8 @@ const Combobox = ({
   const handleOnBlur = useCallback(
     event => {
       if (comboboxRef.current && !comboboxRef.current.contains(event.target)) {
+        event.preventDefault()
+
         if (showSelectDropdown) {
           setShowSelectDropdown(false)
         }

@@ -19,6 +19,7 @@ import {
   MLRUN_STORAGE_INPUT_PATH_SCHEME
 } from './jobsPanelDataInputs.util'
 import artifactsAction from '../../actions/artifacts'
+import { isEveryObjectValueEmpty } from '../../utils/isEveryObjectValueEmpty'
 
 const JobsPanelDataInputs = ({
   fetchArtifacts,
@@ -33,13 +34,18 @@ const JobsPanelDataInputs = ({
     jobsPanelDataInputsReducer,
     initialState
   )
-  const pathScheme = inputsState.newInput.path.pathType
 
   useEffect(() => {
-    if (pathScheme === MLRUN_STORAGE_INPUT_PATH_SCHEME) {
+    if (
+      inputsState.newInput.path.pathType === MLRUN_STORAGE_INPUT_PATH_SCHEME ||
+      inputsState.selectedDataInput.data.path.pathType ===
+        MLRUN_STORAGE_INPUT_PATH_SCHEME
+    ) {
       if (
         inputsState.projects.length === 0 ||
-        inputsState.newInput.path.project.length === 0
+        inputsState.newInput.path.project.length === 0 ||
+        (!isEveryObjectValueEmpty(inputsState.selectedDataInput) &&
+          inputsState.selectedDataInput.data.path.value.length === 0)
       ) {
         const projectsList = projectStore.projects.map(project => ({
           label:
@@ -56,61 +62,88 @@ const JobsPanelDataInputs = ({
       }
     }
   }, [
-    pathScheme,
     inputsState.newInput.path.project.length,
     inputsState.projects.length,
     match.params.projectName,
-    projectStore.projects
+    projectStore.projects,
+    inputsState.newInput.path.pathType,
+    inputsState.selectedDataInput.data.path.value,
+    inputsState.selectedDataInput
   ])
 
   useEffect(() => {
     if (
       inputsState.artifacts.length === 0 &&
-      inputsState.newInputProjectPathEntered
+      inputsState.inputProjectPathEntered
     ) {
-      fetchArtifacts({ project: inputsState.newInput.path.project }).then(
-        artifacts => {
-          const artifactsList = artifacts
-            .map(artifact => ({
-              label: artifact.link_iteration
-                ? artifact.link_iteration.db_key
-                : artifact.key ?? '',
-              id: artifact.link_iteration
-                ? artifact.link_iteration.db_key
-                : artifact.key ?? ''
-            }))
-            .filter(artifact => artifact.label !== '')
+      fetchArtifacts({
+        project:
+          inputsState.newInput.path.project ||
+          inputsState.selectedDataInput.data.path.value.split('/')[0]
+      }).then(artifacts => {
+        const artifactsList = artifacts
+          .map(artifact => ({
+            label: artifact.link_iteration
+              ? artifact.link_iteration.db_key
+              : artifact.key ?? '',
+            id: artifact.link_iteration
+              ? artifact.link_iteration.db_key
+              : artifact.key ?? ''
+          }))
+          .filter(artifact => artifact.label !== '')
 
-          inputsDispatch({
-            type: inputsActions.SET_ARTIFACTS,
-            payload: artifactsList
-          })
-        }
-      )
+        inputsDispatch({
+          type: inputsActions.SET_ARTIFACTS,
+          payload: artifactsList
+        })
+      })
     }
   }, [
     fetchArtifacts,
     inputsState.artifacts.length,
     inputsState.newInput.path.project,
-    inputsState.newInputProjectPathEntered
+    inputsState.inputProjectPathEntered,
+    inputsState.selectedDataInput.data.path.value
   ])
 
   useEffect(() => {
-    if (pathScheme === MLRUN_STORAGE_INPUT_PATH_SCHEME) {
+    if (
+      inputsState.newInput.path.pathType === MLRUN_STORAGE_INPUT_PATH_SCHEME ||
+      inputsState.selectedDataInput.data.path.pathType ===
+        MLRUN_STORAGE_INPUT_PATH_SCHEME
+    ) {
       let matches = []
 
-      if (inputsState.newInputProjectPathEntered) {
-        matches = inputsState.artifacts.filter(artifact =>
-          artifact.id.startsWith(inputsState.newInput.path.artifact)
-        )
+      if (inputsState.inputProjectPathEntered) {
+        matches = inputsState.artifacts.filter(artifact => {
+          return isEveryObjectValueEmpty(
+            inputsState.selectedDataInput.data.path
+          )
+            ? artifact.id.startsWith(inputsState.newInput.path.artifact)
+            : artifact.id.startsWith(
+                inputsState.selectedDataInput.data.path.value.split('/')[1]
+              )
+        })
       } else if (
-        inputsState.newInput.path.project.length > 0 &&
-        inputsState.newInput.path.project !== match.params.projectName
+        (inputsState.newInput.path.project.length > 0 &&
+          inputsState.newInput.path.project !== match.params.projectName) ||
+        (inputsState.selectedDataInput.data.path.value.length > 0 &&
+          inputsState.selectedDataInput.data.path.value.split('/')[0] !==
+            match.params.projectName)
       ) {
         matches = inputsState.projects.filter(project => {
-          return project.id.startsWith(inputsState.newInput.path.project)
+          return isEveryObjectValueEmpty(
+            inputsState.selectedDataInput.data.path
+          )
+            ? project.id.startsWith(inputsState.newInput.path.project)
+            : project.id.startsWith(
+                inputsState.selectedDataInput.data.path.value.split('/')[0]
+              )
         })
-      } else if (inputsState.newInput.path.pathType.length === 0) {
+      } else if (
+        inputsState.newInput.path.pathType.length === 0 &&
+        inputsState.selectedDataInput.data.path.pathType === 0
+      ) {
         matches = [...inputsState.artifacts]
       } else {
         matches = [...inputsState.projects]
@@ -124,10 +157,11 @@ const JobsPanelDataInputs = ({
   }, [
     inputsState.artifacts,
     inputsState.newInput.path,
-    inputsState.newInputProjectPathEntered,
+    inputsState.inputProjectPathEntered,
     inputsState.projects,
     match.params.projectName,
-    pathScheme
+    inputsState.selectedDataInput.data.path.pathType,
+    inputsState.selectedDataInput.data.path
   ])
 
   const handleAddNewItem = () => {
@@ -154,7 +188,6 @@ const JobsPanelDataInputs = ({
       inputs,
       panelState.tableData.dataInputs,
       inputsDispatch,
-      inputsState.selectedDataInput.newDataInputName,
       panelDispatch,
       inputsActions.SET_SELECTED_INPUT,
       inputsState.selectedDataInput.data,
@@ -195,7 +228,10 @@ const JobsPanelDataInputs = ({
   return (
     <JobsPanelDataInputsView
       comboboxMatchesList={
-        pathScheme === MLRUN_STORAGE_INPUT_PATH_SCHEME
+        inputsState.newInput.path.pathType ===
+          MLRUN_STORAGE_INPUT_PATH_SCHEME ||
+        inputsState.selectedDataInput.data.path.pathType ===
+          MLRUN_STORAGE_INPUT_PATH_SCHEME
           ? inputsState.comboboxMatches
           : []
       }

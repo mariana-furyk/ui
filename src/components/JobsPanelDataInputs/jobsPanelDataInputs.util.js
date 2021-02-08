@@ -1,5 +1,6 @@
 import { inputsActions } from './jobsPanelDataInputsReducer'
 import { isNil } from 'lodash'
+import { joinDataOfArrayOrObject } from '../../utils'
 
 export const handleAddItem = (
   currentTableData,
@@ -42,6 +43,13 @@ export const handleAddItem = (
     })
   }
 
+  const isUrlPath = [
+    AZURE_STORAGE_INPUT_PATH_SCHEME,
+    GOOGLE_STORAGE_INPUT_PATH_SCHEME,
+    S3_INPUT_PATH_SCHEME,
+    V3IO_INPUT_PATH_SCHEME
+  ].includes(newItemObj.path.pathType)
+
   panelDispatch({
     type: setPreviousData,
     payload: [
@@ -50,13 +58,16 @@ export const handleAddItem = (
         isDefault: false,
         data: {
           name: newItemObj.name,
-          path:
-            newItemObj.path.pathType === AZURE_STORAGE_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === GOOGLE_STORAGE_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === S3_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === V3IO_INPUT_PATH_SCHEME
-              ? `${newItemObj.path.pathType}${newInputUrlPath}`
-              : `${newItemObj.path.pathType}${newItemObj.path.project}/${newItemObj.path.artifact}`
+          // path: isUrlPath
+          //   ? `${newItemObj.path.pathType}${newInputUrlPath}`
+          //   : `${newItemObj.path.pathType}${newItemObj.path.project}/${newItemObj.path.artifact}`
+          path: {
+            pathType: newItemObj.path.pathType,
+            value: newInputUrlPath
+              ? ''
+              : `${newItemObj.path.project}/${newItemObj.path.artifact}`,
+            url: newInputUrlPath ?? ''
+          }
         }
       }
     ]
@@ -69,13 +80,13 @@ export const handleAddItem = (
         isDefault: false,
         data: {
           name: newItemObj.name,
-          path:
-            newItemObj.path.pathType === AZURE_STORAGE_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === GOOGLE_STORAGE_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === S3_INPUT_PATH_SCHEME ||
-            newItemObj.path.pathType === V3IO_INPUT_PATH_SCHEME
-              ? newItemObj.path.pathType + newInputUrlPath
-              : `${newItemObj.path.pathType}${newItemObj.path.project}/${newItemObj.path.artifact}`
+          path: {
+            pathType: newItemObj.path.pathType,
+            value: newInputUrlPath
+              ? ''
+              : `${newItemObj.path.project}/${newItemObj.path.artifact}`,
+            url: newInputUrlPath ?? ''
+          }
         }
       }
     ]
@@ -93,13 +104,9 @@ export const handleAddItem = (
   })
   setNewJobData({
     ...newJobData,
-    [newItemObj.name]:
-      newItemObj.path.pathType === AZURE_STORAGE_INPUT_PATH_SCHEME ||
-      newItemObj.path.pathType === GOOGLE_STORAGE_INPUT_PATH_SCHEME ||
-      newItemObj.path.pathType === S3_INPUT_PATH_SCHEME ||
-      newItemObj.path.pathType === V3IO_INPUT_PATH_SCHEME
-        ? newItemObj.path.pathType + newInputUrlPath
-        : `${newItemObj.path.pathType}${newItemObj.path.project}/${newItemObj.path.artifact}`
+    [newItemObj.name]: isUrlPath
+      ? newItemObj.path.pathType + newInputUrlPath
+      : `${newItemObj.path.pathType}${newItemObj.path.project}/${newItemObj.path.artifact}`
   })
 }
 
@@ -107,7 +114,6 @@ export const handleEdit = (
   currentPanelData,
   currentTableData,
   inputsDispatch,
-  newName,
   panelDispatch,
   removeSelectedItem,
   selectedItem,
@@ -117,18 +123,24 @@ export const handleEdit = (
 ) => {
   const currentDataObj = { ...currentPanelData }
 
-  if (newName) {
+  if (selectedItem.newDataInputName) {
     delete currentDataObj[selectedItem.name]
-    currentDataObj[newName] = selectedItem.path
+    currentDataObj[selectedItem.newDataInputName] = joinDataOfArrayOrObject(
+      selectedItem.path,
+      ''
+    )
   } else {
-    currentDataObj[selectedItem.name] = selectedItem.path
+    currentDataObj[selectedItem.name] = joinDataOfArrayOrObject(
+      selectedItem.path,
+      ''
+    )
   }
 
   setCurrentPanelData({ ...currentDataObj })
 
   const newDataArray = currentTableData.map(dataItem => {
     if (dataItem.data.name === selectedItem.name) {
-      dataItem.data.name = newName || selectedItem.name
+      dataItem.data.name = selectedItem.newDataInputName || selectedItem.name
       dataItem.data.path = selectedItem.path
     }
     return dataItem
@@ -144,7 +156,16 @@ export const handleEdit = (
   })
   inputsDispatch({
     type: removeSelectedItem,
-    payload: {}
+    payload: {
+      data: {
+        name: '',
+        path: {
+          pathType: '',
+          value: '',
+          url: ''
+        }
+      }
+    }
   })
 }
 
@@ -222,6 +243,13 @@ export const MLRUN_STORAGE_INPUT_PATH_SCHEME = 'store://'
 export const S3_INPUT_PATH_SCHEME = 's3://'
 export const V3IO_INPUT_PATH_SCHEME = 'v3io://'
 
+const typesPlaceholders = {
+  [S3_INPUT_PATH_SCHEME]: 'bucket/path',
+  [GOOGLE_STORAGE_INPUT_PATH_SCHEME]: 'bucket/path',
+  [AZURE_STORAGE_INPUT_PATH_SCHEME]: 'container/path',
+  [V3IO_INPUT_PATH_SCHEME]: '/container-name/file'
+}
+
 export const handleInputPathTypeChange = (
   inputsDispatch,
   newInput,
@@ -230,14 +258,7 @@ export const handleInputPathTypeChange = (
   newInputDefaultPathProject,
   currentProject
 ) => {
-  if (
-    pathType === AZURE_STORAGE_INPUT_PATH_SCHEME ||
-    pathType === GOOGLE_STORAGE_INPUT_PATH_SCHEME ||
-    pathType === HTTP_STORAGE_INPUT_PATH_SCHEME ||
-    pathType === HTTPS_STORAGE_INPUT_PATH_SCHEME ||
-    pathType === S3_INPUT_PATH_SCHEME ||
-    pathType === V3IO_INPUT_PATH_SCHEME
-  ) {
+  if (pathType === MLRUN_STORAGE_INPUT_PATH_SCHEME) {
     inputsDispatch({
       type: inputsActions.SET_NEW_INPUT_DEFAULT_PATH_PROJECT,
       payload: ''
@@ -251,15 +272,7 @@ export const handleInputPathTypeChange = (
 
   inputsDispatch({
     type: inputsActions.SET_PATH_PLACEHOLDER,
-    payload:
-      pathType === S3_INPUT_PATH_SCHEME ||
-      pathType === GOOGLE_STORAGE_INPUT_PATH_SCHEME
-        ? 'bucket/path'
-        : pathType === AZURE_STORAGE_INPUT_PATH_SCHEME
-        ? 'container/path'
-        : pathType === V3IO_INPUT_PATH_SCHEME
-        ? '/container-name/file'
-        : ''
+    payload: typesPlaceholders[pathType] || ''
   })
   inputsDispatch({
     type: inputsActions.SET_NEW_INPUT_URL_PATH,
@@ -276,13 +289,13 @@ export const handleInputPathTypeChange = (
 }
 
 export const handleInputPathChange = (inputsDispatch, inputsState, path) => {
-  const pathScheme = inputsState.newInput.path.pathType
-
   if (
-    pathScheme === AZURE_STORAGE_INPUT_PATH_SCHEME ||
-    pathScheme === GOOGLE_STORAGE_INPUT_PATH_SCHEME ||
-    pathScheme === S3_INPUT_PATH_SCHEME ||
-    pathScheme === V3IO_INPUT_PATH_SCHEME
+    [
+      AZURE_STORAGE_INPUT_PATH_SCHEME,
+      GOOGLE_STORAGE_INPUT_PATH_SCHEME,
+      S3_INPUT_PATH_SCHEME,
+      V3IO_INPUT_PATH_SCHEME
+    ].includes(inputsState.newInput.path.pathType)
   ) {
     return inputsDispatch({
       type: inputsActions.SET_NEW_INPUT_URL_PATH,
@@ -325,11 +338,11 @@ export const handleInputPathChange = (inputsDispatch, inputsState, path) => {
   }
 
   inputsDispatch({
-    type: inputsActions.SET_NEW_INPUT_PROJECT_PATH_ENTERED,
+    type: inputsActions.SET_INPUT_PROJECT_PATH_ENTERED,
     payload: typeof pathItems[1] === 'string'
   })
   inputsDispatch({
-    type: inputsActions.SET_NEW_INPUT_ARTIFACT_PATH_ENTERED,
+    type: inputsActions.SET_INPUT_ARTIFACT_PATH_ENTERED,
     payload: !!artifactIsEntered
   })
 }

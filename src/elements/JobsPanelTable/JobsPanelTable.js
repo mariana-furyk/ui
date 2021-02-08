@@ -20,7 +20,10 @@ const JobsPanelTable = ({
   match,
   section,
   selectedItem,
-  setSelectedItem
+  setSelectedItem,
+  sectionDispatch,
+  sectionState,
+  comboboxMatchesList
 }) => {
   const [editItem, setEditItem] = useState(false)
 
@@ -87,6 +90,9 @@ const JobsPanelTable = ({
       section={section}
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
+      sectionDispatch={sectionDispatch}
+      sectionState={sectionState}
+      comboboxMatchesList={comboboxMatchesList}
     />
   )
 }

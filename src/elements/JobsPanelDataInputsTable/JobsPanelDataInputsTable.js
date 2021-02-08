@@ -40,12 +40,15 @@ export const JobsPanelDataInputsTable = ({
       match={match}
       section="data-inputs"
       selectedItem={inputsState.selectedDataInput}
-      setSelectedItem={selectedInput =>
+      setSelectedItem={selectedInput => {
         inputsDispatch({
           type: inputsActions.SET_SELECTED_INPUT,
           payload: selectedInput
         })
-      }
+      }}
+      sectionDispatch={inputsDispatch}
+      sectionState={inputsState}
+      comboboxMatchesList={comboboxMatchesList}
     >
       {inputsState.addNewInput ? (
         <div className="table__row-add-item">
