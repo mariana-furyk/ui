@@ -25,7 +25,7 @@ Feature: MLRun Projects Page
         Then value in "name" column with "text" in "Projects_Table" on "Projects" wizard should contains "at"
 
     @passive
-    Scenario: Sort projects in ascending and decending order
+    Scenario: Sort projects in ascending and descending order
         Given open url
         And wait load page
         When select "By name" option in "Projects_Sort_Dropdown" dropdown on "Projects" wizard
@@ -41,6 +41,7 @@ Feature: MLRun Projects Page
         Then verify if "Create_New_Project" popup dialog appears
         Then verify "Name_Input" element visibility on "Create_New_Project" wizard
         Then verify "Name_Input" on "Create_New_Project" wizard should display "Input_Hint"."Project_Name_Hint"
+        Then verify "Name_Input" according hint rules on "Create_New_Project" wizard
         Then verify "Description_Input" element visibility on "Create_New_Project" wizard
         Then verify "Cancel_Button" element visibility on "Create_New_Project" wizard
         Then verify "Create_Button" element visibility on "Create_New_Project" wizard
