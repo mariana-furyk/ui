@@ -11,7 +11,7 @@ Feature: Jobs and workflows
         And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "Project" wizard
         And wait load page
         Then verify "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard should contains "Jobs_And_Workflows"."Tab_List"
-        Then verify "Monitor Jobs" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then verify "New_Job_Button" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Resource_Monitoring_Button" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Refresh_Button" element visibility on "Jobs_Monitor_Tab" wizard
@@ -35,7 +35,7 @@ Feature: Jobs and workflows
         Then verify "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard should contains "Jobs_And_Workflows"."Tab_List"
         And select "Monitor Workflows" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Monitor Workflows" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Monitor Workflows" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then verify "Workflows_Monitor_Table" element visibility on "Workflows_Monitor_Tab" wizard
 
     @passive
@@ -50,7 +50,7 @@ Feature: Jobs and workflows
         Then verify "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard should contains "Jobs_And_Workflows"."Tab_List"
         And select "Schedule" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Schedule" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Name_Filter_Input" element visibility on "Schedule_Monitor_Tab" wizard
         Then verify "Table_Labels_Filter_Input" element visibility on "Schedule_Monitor_Tab" wizard
         Then verify "Table_Refresh_Button" element visibility on "Schedule_Monitor_Tab" wizard
@@ -121,7 +121,7 @@ Feature: Jobs and workflows
         And wait load page
         And select "Schedule" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Schedule" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then type value "test" to "Table_Name_Filter_Input" field on "Schedule_Monitor_Tab" wizard
         Then click on "Table_Refresh_Button" element on "Schedule_Monitor_Tab" wizard
         And wait load page
@@ -155,7 +155,7 @@ Feature: Jobs and workflows
         And wait load page
         And select "Schedule" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Schedule" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then type value "v3io_user" to "Table_Labels_Filter_Input" field on "Schedule_Monitor_Tab" wizard
         Then click on "Table_Refresh_Button" element on "Schedule_Monitor_Tab" wizard
         And wait load page
@@ -218,7 +218,7 @@ Feature: Jobs and workflows
         And wait load page
         And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "Project" wizard
         And wait load page
-        Then verify "Monitor Jobs" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         When click on cell with row index 1 in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
         And wait load page
         Then verify "Arrow_Back" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
@@ -227,7 +227,7 @@ Feature: Jobs and workflows
         Then verify "Cross_Close_Button" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Info_Pane_Tab_Selector" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Tab_List"
-        Then verify "Overview" tab is activ in "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard
+        Then verify "Overview" tab is active in "Info_Pane_Tab_Selector" on "Jobs_Monitor_Tab_Info_Pane" wizard
         Then verify "Overview_Headers" on "Jobs_Monitor_Tab_Info_Pane" wizard should contains "Jobs_Monitor_Tab_Info_Pane"."Overview_Headers"
 
     @passive
@@ -240,7 +240,7 @@ Feature: Jobs and workflows
         And wait load page
         And select "Schedule" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Schedule" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         When click on cell with row index 1 in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
         And wait load page
         Then verify "Header" element visibility on "ML_Function_Info_Pane" wizard
@@ -248,7 +248,7 @@ Feature: Jobs and workflows
         Then verify "Cross_Close_Button" element visibility on "ML_Function_Info_Pane" wizard
         Then verify "Info_Pane_Tab_Selector" element visibility on "ML_Function_Info_Pane" wizard
         Then verify "Info_Pane_Tab_Selector" on "ML_Function_Info_Pane" wizard should contains "ML_Function_Info_Pane"."Tab_List"
-        Then verify "Overview" tab is activ in "Info_Pane_Tab_Selector" on "ML_Function_Info_Pane" wizard
+        Then verify "Overview" tab is active in "Info_Pane_Tab_Selector" on "ML_Function_Info_Pane" wizard
         Then verify "Overview_Headers" on "ML_Function_Info_Pane" wizard should contains "ML_Function_Info_Pane"."Overview_Headers"
 
     @passive
@@ -261,7 +261,7 @@ Feature: Jobs and workflows
         And wait load page
         And select "Schedule" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Schedule" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then select "Delete" option in action menu on "Schedule_Monitor_Tab" wizard in "Schedule_Monitor_Table" table at row with "clean-data" value in "name" column
         Then verify if "Delete_Scheduled_Job_Popup" popup dialog appears
         Then "Description" component on "Delete_Scheduled_Job_Popup" should contains "Descriptions"."Delete_Scheduled_Job"
@@ -283,6 +283,7 @@ Feature: Jobs and workflows
         And wait load page
         Then click on "Name_Edit_Button" element on "New_JobTemplate_Edit" wizard
         Then verify "Job_Name_Input" on "New_JobTemplate_Edit" wizard should display "Input_Hint"."Jobs_Name_Hint"
+        Then verify "Job_Name_Input" according hint rules on "New_JobTemplate_Edit" wizard
         Then type value "" to "Job_Name_Input" field on "New_JobTemplate_Edit" wizard
         Then verify "Job_Name_Input" on "New_JobTemplate_Edit" wizard should display warning "Input_Hint"."Input_Field_Require"
         Then type value "   " to "Job_Name_Input" field on "New_JobTemplate_Edit" wizard
@@ -620,7 +621,7 @@ Feature: Jobs and workflows
         And wait load page
         And click on cell with value "Jobs and workflows" in "link" column in "General_Info_Quick_Links" table on "Project" wizard
         And wait load page
-        Then verify "Monitor Jobs" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Monitor Jobs" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then select "Past month" option in "Start_Time_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         Then select "View YAML" option in action menu on "Jobs_Monitor_Tab" wizard in "Jobs_Monitor_Table" table at row with "test-m_ingest" value in "name" column
         Then verify if "View_YAML" popup dialog appears
@@ -638,7 +639,7 @@ Feature: Jobs and workflows
         And wait load page
         And select "Monitor Workflows" tab in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         And wait load page
-        Then verify "Monitor Workflows" tab is activ in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
+        Then verify "Monitor Workflows" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then select "View YAML" option in action menu on "Workflows_Monitor_Tab" wizard in "Workflows_Monitor_Table" table at row with "churn-project-admin-main 2021-08-29 19-52-08" value in "name" column
         Then verify if "View_YAML" popup dialog appears
         Then verify "Cross_Cancel_Button" element visibility on "View_YAML" wizard
