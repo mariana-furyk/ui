@@ -56,6 +56,7 @@ import { getViewMode } from '../../utils/helper'
 
 import { ReactComponent as TagIcon } from 'igz-controls/images/tag-icon.svg'
 import { ReactComponent as YamlIcon } from 'igz-controls/images/yaml.svg'
+import { useSortTable } from '../../hooks/useSortTable.hook'
 
 const Files = () => {
   const [files, setFiles] = useState([])
@@ -192,6 +193,12 @@ const Files = () => {
       : files.map(contentItem => createFilesRowData(contentItem, params.projectName, frontendSpec))
   }, [files, filtersStore.groupBy, frontendSpec, latestItems, params.projectName])
 
+  const { sortedTableContent } = useSortTable({
+    headers: tableContent[0]?.content,
+    content: tableContent,
+    sortConfig: { defaultSortBy: 'updated', defaultDirection: 'desc' }
+  })
+
   const applyDetailsChanges = useCallback(
     changes => {
       return handleApplyDetailsChanges(
@@ -290,7 +297,7 @@ const Files = () => {
       setFiles={setFiles}
       setSelectedFile={setSelectedFile}
       setSelectedRowData={setSelectedRowData}
-      tableContent={tableContent}
+      tableContent={sortedTableContent}
       toggleConvertedYaml={toggleConvertedYaml}
       viewMode={viewMode}
       urlTagOption={urlTagOption}

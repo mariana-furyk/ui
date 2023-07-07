@@ -54,6 +54,7 @@ import { setNotification } from '../../../reducers/notificationReducer'
 import { useGetTagOptions } from '../../../hooks/useGetTagOptions.hook'
 import { useGroupContent } from '../../../hooks/groupContent.hook'
 import { useOpenPanel } from '../../../hooks/openPanel.hook'
+import { useSortTable } from '../../../hooks/useSortTable.hook'
 
 const FeatureVectors = ({
   deleteFeatureVector,
@@ -86,16 +87,13 @@ const FeatureVectors = ({
 
   const pageData = useMemo(() => generatePageData(selectedFeatureVector), [selectedFeatureVector])
 
-  const detailsFormInitialValues = useMemo(
-    () => {
-        return {
-          features: (selectedFeatureVector.specFeatures ?? []).map( featureData => {
-              return {...parseFeatureTemplate(featureData)}
-          })
-        }
-    },
-    [selectedFeatureVector.specFeatures]
-  )
+  const detailsFormInitialValues = useMemo(() => {
+    return {
+      features: (selectedFeatureVector.specFeatures ?? []).map(featureData => {
+        return { ...parseFeatureTemplate(featureData) }
+      })
+    }
+  }, [selectedFeatureVector.specFeatures])
 
   const fetchData = useCallback(
     filters => {
@@ -286,6 +284,12 @@ const FeatureVectors = ({
         )
   }, [featureVectors, filtersStore.groupBy, latestItems, params.projectName])
 
+  const { sortedTableContent } = useSortTable({
+    headers: tableContent[0]?.content,
+    content: tableContent,
+    sortConfig: { defaultSortBy: 'updated', defaultDirection: 'desc' }
+  })
+
   const handleSelectFeatureVector = item => {
     if (params.name === item.name && params.tag === item.tag) {
       setSelectedFeatureVector(item)
@@ -436,7 +440,7 @@ const FeatureVectors = ({
       selectedRowData={selectedRowData}
       setCreateVectorPopUpIsOpen={setCreateVectorPopUpIsOpen}
       setSelectedFeatureVector={handleSelectFeatureVector}
-      tableContent={tableContent}
+      tableContent={sortedTableContent}
     />
   )
 }

@@ -127,7 +127,7 @@ const MonitorWorkflows = ({
   const { sortedTableContent } = useSortTable({
     headers: tableContent[0]?.content,
     content: tableContent,
-    sortConfig: { defaultSortBy: 'startedAt' }
+    sortConfig: { defaultSortBy: 'created_at', defaultDirection: 'desc' }
   })
 
   const handleFetchFunctionLogs = useCallback(
