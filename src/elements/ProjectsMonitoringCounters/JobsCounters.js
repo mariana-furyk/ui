@@ -24,7 +24,7 @@ import { upperFirst } from 'lodash'
 
 import Loader from '../../common/Loader/Loader'
 import StatsCard from '../../common/StatsCard/StatsCard'
-import { Tooltip, TextTooltipTemplate } from 'igz-controls/components'
+import { Tip, Tooltip, TextTooltipTemplate } from 'igz-controls/components'
 
 import { generateMonitoringStats } from '../../utils/generateMonitoringData'
 import { JOBS_MONITORING_JOBS_TAB } from '../../constants'
@@ -55,6 +55,7 @@ const JobsCounters = () => {
         <div className="project-card__info">
           <ClockIcon className="project-card__info-icon" />
           <span>Past 24 hours</span>
+          <Tip text="Running jobs may have started at any time" />
         </div>
       </StatsCard.Header>
       <StatsCard.Row>
@@ -89,9 +90,11 @@ const JobsCounters = () => {
       </StatsCard.Row>
       <StatsCard.Row>
         <StatsCard.Col>
-          <span className="link" onClick={jobStats.all.link} data-testid="jobs_see_all">
-            See all
-          </span>
+          <Tooltip template={<TextTooltipTemplate text="All jobs started in the last 24 hours" />}>
+            <span className="link" onClick={jobStats.all.link} data-testid="jobs_see_all">
+              See all
+            </span>
+          </Tooltip>
         </StatsCard.Col>
       </StatsCard.Row>
     </StatsCard>
