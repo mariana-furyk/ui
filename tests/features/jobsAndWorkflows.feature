@@ -29,6 +29,7 @@ Feature: Jobs and workflows
         Then verify "Date_Picker_Filter_Dropdown" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Date_Picker_Filter_Dropdown" dropdown element on "Jobs_Monitor_Tab" wizard should contains "Dropdown_Options"."Date_Picker_Filter_Options"
         Then verify "Table_FilterBy_Button" element visibility on "Jobs_Monitor_Tab" wizard
+        Then verify "Table_FilterBy_Button" element on "Jobs_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."FilterBy_Button"
         Then click on "Table_FilterBy_Button" element on "Jobs_Monitor_Tab" wizard
         Then "Title" element on "FilterBy_Popup" should contains "Filter by" value
         Then verify "Status_Filter_Dropdown" element visibility on "FilterBy_Popup" wizard
@@ -53,6 +54,7 @@ Feature: Jobs and workflows
         Then verify "Auto_Refresh_Checkbox" element visibility on "Jobs_Monitor_Tab" wizard
         Then "Auto_Refresh_Checkbox" element should be checked on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Refresh_Button" element visibility on "Jobs_Monitor_Tab" wizard
+        Then verify "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."Refresh_Button"
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         And wait load page
         Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Any time"
@@ -60,6 +62,11 @@ Feature: Jobs and workflows
         Then click on "Table_Refresh_Button" element on "Jobs_Monitor_Tab" wizard
         Then wait for 3 seconds
         Then verify "Jobs_Monitor_Table" element visibility on "Jobs_Monitor_Tab" wizard
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        When click on cell with row index 1 in "name" column in "Jobs_Monitor_Table" table on "Jobs_Monitor_Tab" wizard
+        And wait load page
+        Then verify "Header" element visibility on "Jobs_Monitor_Tab_Info_Pane" wizard
 
     @MLJW
     @passive
@@ -87,8 +94,10 @@ Feature: Jobs and workflows
         Then verify "Monitor Workflows" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Name_Filter_Input" element visibility on "Workflows_Monitor_Tab" wizard
         Then verify "Date_Picker_Filter_Dropdown" element visibility on "Workflows_Monitor_Tab" wizard
+        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Workflows_Monitor_Tab" wizard selected option value "Past week"
         Then verify "Date_Picker_Filter_Dropdown" dropdown element on "Workflows_Monitor_Tab" wizard should contains "Dropdown_Options"."Date_Picker_Filter_Options"
         Then verify "Table_FilterBy_Button" element visibility on "Workflows_Monitor_Tab" wizard
+        Then verify "Table_FilterBy_Button" element on "Workflows_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."FilterBy_Button"
         Then click on "Table_FilterBy_Button" element on "Workflows_Monitor_Tab" wizard
         Then "Title" element on "FilterBy_Popup" should contains "Filter by" value
         Then verify "Status_Filter_Dropdown" element visibility on "FilterBy_Popup" wizard
@@ -104,6 +113,7 @@ Feature: Jobs and workflows
         Then verify "Apply_Button" element on "FilterBy_Popup" wizard is disabled
         Then click on "Table_FilterBy_Button" element on "Workflows_Monitor_Tab" wizard
         Then verify "Table_Refresh_Button" element visibility on "Workflows_Monitor_Tab" wizard
+        Then verify "Table_Refresh_Button" element on "Workflows_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."Refresh_Button"
         Then verify "Workflows_Monitor_Table" element visibility on "Workflows_Monitor_Tab" wizard
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Workflows_Monitor_Tab" wizard
         And wait load page
@@ -114,6 +124,11 @@ Feature: Jobs and workflows
         Then verify "Workflows_Monitor_Table" element visibility on "Workflows_Monitor_Tab" wizard
         Then verify "Monitor_Workflows_Subtitle" element visibility on "Workflows_Monitor_Tab" wizard
         Then "Monitor_Workflows_Subtitle" element on "Workflows_Monitor_Tab" should contains "View running workflows and previously executed workflows" value
+        When click on cell with row index 2 in "name" column in "Workflows_Monitor_Table" table on "Workflows_Monitor_Tab" wizard
+        And wait load page
+        Then click on "Toggle_View_Button" element on "Workflows_Monitor_Tab" wizard
+        When click on cell with row index 2 in "name" column in "Workflow_List_View_Table" table on "Workflows_Monitor_Tab" wizard
+        Then click on "Arrow_Back" element on "Workflows_Monitor_Tab_Info_Pane" wizard
         And turn on demo mode
         And wait load page
         Then click on "Table_FilterBy_Button" element on "Workflows_Monitor_Tab" wizard
@@ -142,8 +157,10 @@ Feature: Jobs and workflows
         Then verify "Schedule" tab is active in "Jobs_Tab_Selector" on "Jobs_Monitor_Tab" wizard
         Then verify "Table_Name_Filter_Input" element visibility on "Schedule_Monitor_Tab" wizard
         Then verify "Date_Picker_Filter_Dropdown" element visibility on "Schedule_Monitor_Tab" wizard
+        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Schedule_Monitor_Tab" wizard selected option value "Any time"
         Then verify "Date_Picker_Filter_Dropdown" dropdown element on "Schedule_Monitor_Tab" wizard should contains "Dropdown_Options"."Scheduled_Date_Picker_Filter_Options"
         Then verify "Table_FilterBy_Button" element visibility on "Schedule_Monitor_Tab" wizard
+        Then verify "Table_FilterBy_Button" element on "Schedule_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."FilterBy_Button"
         Then click on "Table_FilterBy_Button" element on "Schedule_Monitor_Tab" wizard
         Then "Title" element on "FilterBy_Popup" should contains "Filter by" value
         Then verify "Type_Filter_Dropdown" element visibility on "FilterBy_Popup" wizard
@@ -158,15 +175,15 @@ Feature: Jobs and workflows
         Then verify "Batch_Run_Button" element visibility on "Schedule_Monitor_Tab" wizard
         Then "Batch_Run_Button" element on "Schedule_Monitor_Tab" should contains "Batch Run" value
         Then verify "Table_Refresh_Button" element visibility on "Schedule_Monitor_Tab" wizard
-        Then verify "Schedule_Monitor_Table" element visibility on "Schedule_Monitor_Tab" wizard
-        When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Schedule_Monitor_Tab" wizard
-        And wait load page
-        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Schedule_Monitor_Tab" wizard selected option value "Any time"
+        Then verify "Table_Refresh_Button" element on "Schedule_Monitor_Tab" wizard should display hover tooltip "Common_Tooltips"."Refresh_Button"
         Then verify "Schedule_Monitor_Table" element visibility on "Schedule_Monitor_Tab" wizard
         Then click on "Table_Refresh_Button" element on "Schedule_Monitor_Tab" wizard
         Then wait for 3 seconds
         Then verify "Schedule_Monitor_Table" element visibility on "Schedule_Monitor_Tab" wizard
-
+        When click on cell with row index 1 in "name" column in "Schedule_Monitor_Table" table on "Schedule_Monitor_Tab" wizard
+        And wait load page
+        Then verify "Header" element visibility on "ML_Function_Info_Pane" wizard
+        
     @MLJW
     @passive
     @smoke
@@ -181,7 +198,7 @@ Feature: Jobs and workflows
         And wait load page
         Then verify "Date_Picker_Filter_Dropdown" element visibility on "Jobs_Monitor_Tab" wizard
         Then verify "Date_Picker_Filter_Dropdown" dropdown element on "Jobs_Monitor_Tab" wizard should contains "Dropdown_Options"."Date_Picker_Filter_Options"
-        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Past 24 hours"
+        Then verify "Date_Picker_Filter_Dropdown" dropdown on "Jobs_Monitor_Tab" wizard selected option value "Past week"
         Then verify "Jobs_Monitor_Table" element visibility on "Jobs_Monitor_Tab" wizard
         When select "Any time" option in "Date_Picker_Filter_Dropdown" filter dropdown on "Jobs_Monitor_Tab" wizard
         And wait load page
