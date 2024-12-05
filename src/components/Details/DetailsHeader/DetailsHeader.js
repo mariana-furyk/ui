@@ -39,7 +39,10 @@ import { formatDatetime } from '../../../utils'
 import { TERTIARY_BUTTON } from 'igz-controls/constants'
 import { ACTIONS_MENU } from '../../../types'
 import { getViewMode } from '../../../utils/helper'
-import { generateUrlFromRouterPath, getDefaultCloseDetailsLink } from '../../../utils/link-helper.util'
+import {
+  generateUrlFromRouterPath,
+  getDefaultCloseDetailsLink
+} from '../../../utils/link-helper.util'
 import { getFilteredSearchParams } from '../../../utils/filter.util'
 
 import { ReactComponent as Close } from 'igz-controls/images/close.svg'
@@ -178,17 +181,16 @@ const DetailsHeader = ({
                     selectedItem?.startTime,
                     stateValue === 'aborted' ? 'N/A' : 'Not yet started'
                   )
-                : selectedItem?.updated
-                  ? formatDatetime(selectedItem?.updated, 'N/A')
-                  : selectedItem?.status?.last_request
-                  ? formatDatetime(selectedItem.status.last_request, 'N/A')
+                : selectedItem?.updated || selectedItem.metadata.updated
+                  ? formatDatetime(selectedItem?.updated || selectedItem.metadata.updated, 'N/A')
                   : ''}
-          </span>
-          {stateValue && stateLabel && (
-            <Tooltip className="state" template={<TextTooltipTemplate text={stateLabel} />}>
-              <i className={stateClassName} />
-            </Tooltip>
-          )}</div>
+            </span>
+            {stateValue && stateLabel && (
+              <Tooltip className="state" template={<TextTooltipTemplate text={stateLabel} />}>
+                <i className={stateClassName} />
+              </Tooltip>
+            )}
+          </div>
           <div className="item-header__status-row">
             {selectedItem.ui?.customError?.title && selectedItem.ui?.customError?.message && (
               <Tooltip
